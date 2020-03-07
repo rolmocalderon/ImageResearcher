@@ -1,0 +1,27 @@
+{
+  "name": "imageresearcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "rebuild": "electron-rebuild -f -w yourmodule",
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar --platform=win32 --arch=x64 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Image Researcher\"",
+    "package-linux": "electron-packager . --overwrite --asar --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds"
+  },
+  "author": "Ruben del Olmo",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^8.0.2",
+    "install": "^0.13.0",
+    "node-gyp": "^6.1.0",
+    "node-pre-gyp": "^0.14.0",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "electron-builder": "^22.3.6",
+    "electron-packager": "^14.2.1",
+    "electron-rebuild": "^1.10.0"
+  }
+}

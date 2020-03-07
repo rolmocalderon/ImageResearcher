@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add window</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <form>
+            <div>
+                <label>Enter image</label>
+                <input type="file" id="image"/>
+            </div>
+            <button class="btn" type="submit">Add image</button>
+        </form>
+    </div>
+
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', submitForm);
+
+        function submitForm(event){
+            event.preventDefault();
+            ipcRenderer.send('item:add', getFileObject());
+        }
+
+        function getFileObject(){
+            let file = document.getElementById('image').files[0];
+            return {
+                name: getFileName(file.name),
+                size: getFileSize(file.size),
+                type: getFileExtension(file.name),
+                path: getPathWithoutFileName(file.path)
+            }
+        }
+
+        function getFileName(fileName){
+            return fileName.substring(0, fileName.lastIndexOf('.'));
+        }
+
+        function getPathWithoutFileName(path){
+            return path.substring(0, path.lastIndexOf('\\')+1);
+        }
+
+        function getFileExtension(fileName){
+            return fileName.substring(fileName.lastIndexOf('.')+1, fileName.length);
+        }
+
+        function getFileSize(size){
+            let units = ['KB','MB','GB'];
+
+            if(Math.abs(size) < 1024) {
+                return size + ' B';
+            }
+
+            let u = -1;
+            do{
+                size /= 1024;
+                ++u;
+            } while(Math.abs(size) >= 1024 && u < units.length -1);
+
+            return size.toFixed(1) + ' ' + units[u];
+        }
+
+    </script>
+</body>
+</html>
