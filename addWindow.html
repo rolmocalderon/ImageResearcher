@@ -8,7 +8,12 @@
     <div>
         <form>
             <div>
-                <label>Enter image</label>
+                <label for="addTag">
+                    <input id="tagName" type="text" name="tag">
+                </label>
+                <button id="addTagButton" type="button">Add Tag</button>
+                <div id="tagContainer" class="tag-container"></div>
+                <p>Enter image</p>
                 <input type="file" id="image"/>
             </div>
             <button class="btn" type="submit">Add image</button>
@@ -18,6 +23,9 @@
     <script>
         const electron = require('electron');
         const {ipcRenderer} = electron;
+
+        const addTagButton = document.getElementById('addTagButton');
+        addTagButton.addEventListener('click',handleAddTag);
 
         const form = document.querySelector('form');
         form.addEventListener('submit', submitForm);
@@ -33,7 +41,8 @@
                 name: getFileName(file.name),
                 size: getFileSize(file.size),
                 type: getFileExtension(file.name),
-                path: getPathWithoutFileName(file.path)
+                path: getPathWithoutFileName(file.path),
+                tags: getTagsValue()
             }
         }
 
@@ -65,6 +74,34 @@
             return size.toFixed(1) + ' ' + units[u];
         }
 
+        function handleAddTag(){
+            const tagContainer = document.getElementById('tagContainer');
+            const tagName = document.getElementById('tagName').value;
+            if(validateTag(tagName,tagContainer)){
+                const tagLabel = `<label name="tag" class="tag">${tagName}</label>`;
+                tagContainer.insertAdjacentHTML("beforeend", tagLabel);
+            }
+        }
+
+        function validateTag(tagName,tagContainer){
+            let tags = getTagsValue();
+            if(tags.length === 0){
+                return true;
+            }
+
+            return !tags.some(tag => tag === tagName);
+        }
+
+        function getTagsValue(){
+            const tagLabels = tagContainer.querySelectorAll('label');
+            let tags = [];
+            
+            for(let i=0;i<tagLabels.length;i++){
+                tags.push(tagLabels[i].textContent);
+            }
+
+            return tags;
+        }
     </script>
 </body>
 </html>

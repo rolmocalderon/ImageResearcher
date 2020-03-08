@@ -42,8 +42,8 @@
             });
         }
         
-        ipcRenderer.on('item:add',function(e, item){
-            connection.insert(item,createImageRow);
+        ipcRenderer.on('item:add',function(e,item){
+            connection.insert(item,createImageRow,item.tags);
         });
 
         function createImageRow(id,item){
@@ -86,7 +86,9 @@
             let id = a.getAttribute('id');
             connection.delete(id);
             a.remove();
-            imageData.classList.add('hidden');
+            if(a.classList.contains('selected')){
+                imageData.classList.add('hidden');
+            }
         }
 
         function showItem(){
@@ -106,12 +108,22 @@
 
             imageData.classList.remove('hidden');
 
-            updateTags();
+            updateTags(element.id);
         }
 
-        function updateTags(){
-            const tags = document.getElementById('tags');
-            //console.log(tags);
+        function updateTags(imageId){
+            const query = 'select t.* from tags t inner join tagged tg on t.id = tg.tagId and tg.ImageId = ' + imageId;
+            connection.fetchAll(query,addTags);
+        }
+
+        function addTags(tags){
+            const tagContainer = document.getElementById('tags');
+            tagContainer.innerHTML = '';
+            tags.forEach(function(tag){
+                let tagName = tag.name;
+                let tagLabel = `<label name="tag" class="tag">#${tagName}</label>`;
+                tagContainer.insertAdjacentHTML("beforeend", tagLabel);
+            });
         }
 
         const addButton = document.getElementById('addButton');

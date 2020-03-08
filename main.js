@@ -43,8 +43,8 @@ function createAddWindow(){
     //Create new window
 
     addWindow = new BrowserWindow({
-        height: 200,
-        width: 300,
+        height: 400,
+        width: 500,
         title: 'Add image',
         webPreferences: {
             nodeIntegration: true
@@ -65,6 +65,7 @@ function createAddWindow(){
 
 //Catch item:add
 ipcMain.on('item:add', function(event, item){
+    console.log(tags);
     mainWindow.webContents.send('item:add', item);
     addWindow.close();
 });

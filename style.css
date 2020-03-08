@@ -126,3 +126,14 @@ a.left-panel-item:not(.selected):hover{
 .hidden{
     visibility: hidden;
 }
+
+.tag{
+    margin: 3px;
+    padding: 7px 20px;
+    background-color: #28a745;
+    border-radius: 3px;
+}
+
+.tag-container{
+    margin: 15px 20px;
+}

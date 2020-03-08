@@ -54,22 +54,30 @@ var get = function(sql,callback){
 }
 
 function checkTags(imageId, tags){
-    tags = ['1','2','3','vale-por-','free-phone-calls'];
-    let query = 'SELECT name FROM tags;';
+    let query = 'SELECT * FROM tags;';
     db.all(query, [], (err, rows) => {
         if (err) {
             throw err;
         }
         
-        rows = rows.map(row => { return row.name; });
-        tags = tags.filter(function(item) {
-            return !rows.includes(item); 
+        let tagsName = rows.map(row => { return row.name; });
+        let tagsNotIncluded = tags.filter(function(item) {
+            return !tagsName.includes(item);
         });
 
-        if(tags.length > 0){
-            tags.forEach(tag => {
+        let tagsIncluded = rows.filter(function(item) {
+            return tags.includes(item.name); 
+        });
+
+        if(tagsNotIncluded.length > 0){
+            tagsNotIncluded.forEach(tag => {
+                console.log("insertando tag...");
                 insertTag(imageId,tag);
             });
+        }
+        if(tagsIncluded.length > 0){
+            console.log("asociando tag...");
+            tagsIncluded.map(tag => asociateTag(tag.id,imageId));
         }
     });
 }
