@@ -7,9 +7,9 @@ db = new sqlite3.Database('./images.db', (err) => {
     console.log('Connected to the database.');
 });
 
-db.each("SELECT * FROM images;", function(err, row) {                                                                                                                                    
+/*db.each("SELECT * FROM images;", function(err, row) {                                                                                                                                    
     console.log(row);
-});
+});*/
 
 module.exports.createTable = function(query){
     db.run(query,function(err){
@@ -31,7 +31,7 @@ module.exports.close = function(){
     });
 }
 
-module.exports.fetchAll = function(sql,callback){
+var fetchAll = function(sql,callback){
     db.all(sql, [], (err, rows) => {
         if (err) {
             throw err;
@@ -41,7 +41,7 @@ module.exports.fetchAll = function(sql,callback){
     });
 }
 
-module.exports.get = function(sql,callback){
+var get = function(sql,callback){
     db.get(sql, [], (err,row) => {
         if (err) {
             throw err;
@@ -53,7 +53,53 @@ module.exports.get = function(sql,callback){
     });
 }
 
-module.exports.insert = function(item,callback){
+function checkTags(imageId, tags){
+    tags = ['1','2','3','vale-por-','free-phone-calls'];
+    let query = 'SELECT name FROM tags;';
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        
+        rows = rows.map(row => { return row.name; });
+        tags = tags.filter(function(item) {
+            return !rows.includes(item); 
+        });
+
+        if(tags.length > 0){
+            tags.forEach(tag => {
+                insertTag(imageId,tag);
+            });
+        }
+    });
+}
+
+var insertTag = function(imageId,tagName,callback){
+    let query = 'INSERT INTO tags(name)values("' + tagName + '")';
+
+    db.run(query,function(err){
+        if(err){
+            console.log(err.message);
+            return;
+        }
+
+        asociateTag(this.lastID,imageId);
+    });
+}
+
+function asociateTag(tagId,imageId){
+    let query = 'INSERT INTO tagged(tagId,imageId)values("' + tagId +'","' + imageId +'")';
+
+    db.run(query,function(err){
+        if(err){
+            console.log(err.message);
+            return;
+        }
+        console.log("Tag associated;");
+    });
+}
+
+var insert = function(item,callback,tags){
     let query = 'INSERT INTO images(name,size,type,path)values("' + 
         item.name + '", "' + 
         item.size + '", "' + 
@@ -66,6 +112,7 @@ module.exports.insert = function(item,callback){
             return;
         }
         if(callback){
+            checkTags(this.lastID,tags);
             callback(this.lastID,item);
         }
         
@@ -73,7 +120,7 @@ module.exports.insert = function(item,callback){
     });
 }
 
-module.exports.delete = function(id){
+var remove = function(id){
     let query = 'DELETE FROM images WHERE id = "' + id + '";';
     db.run(query,function(err){
         if(err){
@@ -85,3 +132,9 @@ module.exports.delete = function(id){
     })
 
 }
+
+module.exports.get = get;
+module.exports.fetchAll = fetchAll;
+module.exports.insert = insert;
+module.exports.delete = remove;
+module.exports.insertTag = insertTag;

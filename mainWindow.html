@@ -6,20 +6,22 @@
 </head>
 <body>
     <div class="container">
-        <div id="header" class="header">
+        <div class="header">
             <h1>Image Researcher</h1>
     
             <button id="addButton">Add Image</button>
         </div>
-        <div id="leftPanel" class="left-panel">
-            <div class="left-panel-item title">Imágenes</div>
-        </div>
-        <div id="imageData" class="element-data">
-            <div class="title">Imagen</div>
-            <div id="imageFile" class="image-file"></div>
-            <div class="image-info">
-                <span>Tags: </span>
-                <div id="tags" class="tag-container"></div>
+        <div class="content">
+            <div id="leftPanel" class="left-panel space round-border back-white">
+                <div class="left-panel-item title">Imágenes</div>
+            </div>
+            <div id="imageData" class="content-panel space round-border hidden">
+                <div class="title">Imagen</div>
+                <div id="imageFile" class="image-file"></div>
+                <div class="image-info back-white">
+                    <span>Tags: </span>
+                    <div id="tags" class="tag-container"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -79,10 +81,12 @@
         //Remove item
         function removeItem(e){
             e.stopPropagation();
+            const imageData = document.getElementById('imageData');
             let a = e.target.closest('a');
             let id = a.getAttribute('id');
             connection.delete(id);
             a.remove();
+            imageData.classList.add('hidden');
         }
 
         function showItem(){
@@ -92,20 +96,22 @@
         }
 
         function showSingleElement(element){
-            console.log(element);
             const imageFile = document.getElementById('imageFile');
+            const imageData = document.getElementById('imageData');
             const img = document.createElement('img');
             img.setAttribute('src',element.path + element.name + '.' + element.type);
 
             imageFile.innerHTML = '';
             imageFile.appendChild(img);
 
+            imageData.classList.remove('hidden');
+
             updateTags();
         }
 
         function updateTags(){
             const tags = document.getElementById('tags');
-            console.log(tags);
+            //console.log(tags);
         }
 
         const addButton = document.getElementById('addButton');
