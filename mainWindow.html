@@ -21,6 +21,10 @@
                 <div class="image-info back-white">
                     <span>Tags: </span>
                     <div id="tags" class="tag-container"></div>
+                    <div class="tag-add">
+                        <input type="text" name="tag_name" id="addTagInput" class="input">
+                        <button type="button" id="add_tagName">Add tag</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,6 +110,7 @@
             imageFile.innerHTML = '';
             imageFile.appendChild(img);
 
+            imageData.setAttribute('id-image',element.id);
             imageData.classList.remove('hidden');
 
             updateTags(element.id);
@@ -127,10 +132,41 @@
         }
 
         const addButton = document.getElementById('addButton');
-        
         addButton.addEventListener('click',function(){
             ipcRenderer.send('addItem');
         });
+
+        const addTagButton = document.getElementById('add_tagName');
+        addTagButton.addEventListener('click',function(){
+            const imageData = document.getElementById('imageData');
+            let imageId = imageData.getAttribute('id-image');
+            const tagContainer = document.getElementById('tags');
+            let tagName = document.getElementById('addTagInput').value;
+            
+            if(validateTag(tagName,tagContainer)){
+                connection.checkTags(imageId,[tagName],updateTags);
+            }
+        });
+
+        function validateTag(tagName,tagContainer){
+            let tags = getTagsValue(tagContainer);
+            if(tags.length === 0){
+                return true;
+            }
+
+            return !tags.some(tag => tag === tagName);
+        }
+
+        function getTagsValue(tagContainer){
+            const tagLabels = tagContainer.querySelectorAll('label');
+            let tags = [];
+            
+            for(let i=0;i<tagLabels.length;i++){
+                tags.push(tagLabels[i].textContent.substring(1, tagLabels[i].textContent.length));
+            }
+
+            return tags;
+        }
     </script>
 </body>
 </html>

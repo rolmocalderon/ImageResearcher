@@ -9,5 +9,5 @@ connection.createTable('CREATE TABLE IF NOT EXISTS images(' +
     'path text NOT NULL' +
 ');');
 
-connection.createTable('CREATE TABLE IF NOT EXISTS tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name text NOT NULL)');
+connection.createTable('CREATE TABLE IF NOT EXISTS tags(id INTEGER PRIMARY KEY AUTOINCREMENT, name text NOT NULL UNIQUE)');
 connection.createTable('CREATE TABLE IF NOT EXISTS tagged(tagId INTEGER, imageId INTEGER)');

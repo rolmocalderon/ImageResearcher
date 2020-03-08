@@ -53,7 +53,7 @@ var get = function(sql,callback){
     });
 }
 
-function checkTags(imageId, tags){
+function checkTags(imageId, tags, callback){
     let query = 'SELECT * FROM tags;';
     db.all(query, [], (err, rows) => {
         if (err) {
@@ -72,38 +72,42 @@ function checkTags(imageId, tags){
         if(tagsNotIncluded.length > 0){
             tagsNotIncluded.forEach(tag => {
                 console.log("insertando tag...");
-                insertTag(imageId,tag);
+                insertTag(imageId,tag,callback);
             });
         }
         if(tagsIncluded.length > 0){
             console.log("asociando tag...");
-            tagsIncluded.map(tag => asociateTag(tag.id,imageId));
+            tagsIncluded.map(tag => asociateTag(tag.id,imageId,callback));
         }
     });
 }
 
 var insertTag = function(imageId,tagName,callback){
-    let query = 'INSERT INTO tags(name)values("' + tagName + '")';
+    let query = 'INSERT INTO tags(name) SELECT "' + tagName +'" ;';
 
     db.run(query,function(err){
         if(err){
             console.log(err.message);
             return;
         }
-
-        asociateTag(this.lastID,imageId);
+        console.log(this.lastID);
+        asociateTag(this.lastID,imageId,callback);
     });
 }
 
-function asociateTag(tagId,imageId){
+function asociateTag(tagId,imageId,callback){
     let query = 'INSERT INTO tagged(tagId,imageId)values("' + tagId +'","' + imageId +'")';
-
+    
     db.run(query,function(err){
         if(err){
             console.log(err.message);
             return;
         }
         console.log("Tag associated;");
+
+        if(callback){
+            callback(imageId);
+        }
     });
 }
 
@@ -146,3 +150,4 @@ module.exports.fetchAll = fetchAll;
 module.exports.insert = insert;
 module.exports.delete = remove;
 module.exports.insertTag = insertTag;
+module.exports.checkTags = checkTags;
