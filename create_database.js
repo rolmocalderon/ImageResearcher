@@ -1,6 +1,5 @@
 const connection = require('./connect');
 
-//connection.dropTable('DROP TABLE IF EXISTS images');
 connection.createTable('CREATE TABLE IF NOT EXISTS images(' +
     'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
     'name text NOT NULL, ' +

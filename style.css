@@ -18,7 +18,7 @@ html,body{
 .content{
     min-height: 500px;
     flex: 1 1 auto;
-    padding: 20px;
+    padding-bottom: 20px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -107,6 +107,11 @@ a.left-panel-item:not(.selected):hover{
     min-height: 50px;
     border-top: 1px solid #efefef;
     border-radius: 0 0 5px 5px;
+    padding-top: 5px;
+}
+
+.image-info span{
+    margin: 20px;
 }
 
 .image-file{
@@ -142,7 +147,7 @@ a.left-panel-item:not(.selected):hover{
 }
 
 .tag-container{
-    margin: 15px 20px;
+    margin: 7px 20px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -173,4 +178,9 @@ a.left-panel-item:not(.selected):hover{
 
 .tag-add button{
     flex: 1 1 auto;
+}
+
+.filter-container{
+    padding: 20px 20px 0 70px;
+    display: flex;
 }

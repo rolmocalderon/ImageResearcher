@@ -11,6 +11,10 @@
     
             <button id="addButton">Add Image</button>
         </div>
+        <div class="tag-container">
+            <span>Filtros(<span id="filterCount">0</span>/5): </h6>
+            <div id="activeFilters" class="filter-container"></div>
+        </div>
         <div class="content">
             <div id="leftPanel" class="left-panel space round-border back-white">
                 <div class="left-panel-item title">Imágenes</div>
@@ -29,28 +33,28 @@
             </div>
         </div>
     </div>
-
+    <script src="./assets/js/index.js"></script>
     <script>
-        const electron = require('electron');
+        /*const electron = require('electron');
         const {ipcRenderer, url} = electron;
         const leftPanel = document.querySelector('#leftPanel');
 
-        const connection = require('./connect');
+        const connection = require('./connect');*/
 
-        let sql = `SELECT id,name FROM images ORDER BY id`;
-        connection.fetchAll(sql,createDatabaseElements);
+        /*let sql = `SELECT id,name FROM images ORDER BY id`;
+        connection.fetchAll(sql,createDatabaseElements);*/
 
-        function createDatabaseElements(result){
+        /*function createDatabaseElements(result){
             result.forEach(function(item){
                 createImageRow(item.id,item);
             });
-        }
+        }*/
         
-        ipcRenderer.on('item:add',function(e,item){
+        /*ipcRenderer.on('item:add',function(e,item){
             connection.insert(item,createImageRow,item.tags);
-        });
+        });*/
 
-        function createImageRow(id,item){
+        /*function createImageRow(id,item){
             const a = document.createElement('a');
             a.addEventListener('click',showItem);
             a.setAttribute('id',id);
@@ -65,9 +69,9 @@
             a.appendChild(imageName);
             a.appendChild(deleteButton);
             leftPanel.appendChild(a);
-        }
+        }*/
 
-        function createDeleteButton(){
+        /*function createDeleteButton(){
             const button = document.createElement('span');
             const buttonText = document.createTextNode('x');
             button.appendChild(buttonText);
@@ -76,14 +80,14 @@
             button.addEventListener('click', removeItem);
 
             return button;
-        }
+        }*/
 
         //Clear items
         ipcRenderer.on('item:clear',function(e){
             leftPanel.innerHTML = '';
         });
 
-        function removeItem(e){
+        /*function removeItem(e){
             e.stopPropagation();
             const imageData = document.getElementById('imageData');
             let a = e.target.closest('a');
@@ -93,9 +97,9 @@
             if(a.classList.contains('selected')){
                 imageData.classList.add('hidden');
             }
-        }
+        }*/
 
-        function showItem(){
+        /*function showItem(){
             let id = this.getAttribute('id');
             setImageSelected.call(this);
             let sql = 'SELECT * FROM images WHERE id = "' + id + '";';
@@ -135,12 +139,14 @@
             tagContainer.innerHTML = '';
             tags.forEach(function(tag){
                 let tagName = tag.name;
-                let tagLabel = `<label name="tag" class="tag">#${tagName}</label>`;
-                tagContainer.insertAdjacentHTML("beforeend", tagLabel);
+                if(!!tagName){
+                    let tagLabel = `<label name="tag" class="tag">#${tagName}</label>`;
+                    tagContainer.insertAdjacentHTML("beforeend", tagLabel);
+                }
             });
-        }
+        }*/
 
-        const addButton = document.getElementById('addButton');
+        /*const addButton = document.getElementById('addButton');
         addButton.addEventListener('click',function(){
             ipcRenderer.send('addItem');
         });
@@ -155,7 +161,7 @@
             if(validateTag(tagName,tagContainer)){
                 connection.checkTags(imageId,[tagName],updateTags);
             }
-        });
+        });*/
 
         function validateTag(tagName,tagContainer){
             let tags = getTagsValue(tagContainer);
