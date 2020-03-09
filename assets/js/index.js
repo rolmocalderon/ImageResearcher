@@ -128,33 +128,51 @@ function addTags(tags){
 
     for(var i=0; i<tagContainer.children.length;i++){
         tagContainer.children[i].addEventListener('click',function(){
-            const id = this.getAttribute('tag-id');
             const activeFilters = document.getElementById('activeFilters');
-            updateFilter(activeFilters,this.textContent,id);
-            let filterIds = '';
-            /*activeFilters.forEach(function(filter){*/
-            for(let i=0;i<activeFilters.children.length;i++){
-                if(filterIds === ''){
-                    filterIds += activeFilters.children[i].getAttribute('tag-id');
-                }else{
-                    filterIds += ',' + activeFilters.children[i].getAttribute('tag-id');
-                }
-                    
+
+            if(validateTag(this.textContent.replace('#', ''),activeFilters)){
+                toggleFilters(activeFilters,this);
             }
-            leftPanel.innerHTML = '';
-            console.log(filterIds);
-
-            /*});*/
-
-            const query = 'SELECT DISTINCT i.* FROM images i INNER JOIN tagged t ON i.id=t.imageId AND t.tagId in(' + filterIds + ')';
-            connection.fetchAll(query,createDatabaseElements);
-            
         });
     }
+}
+
+function toggleFilters(activeFilters,tag){
+    const id = tag.getAttribute('tag-id');
+    updateFilter(activeFilters,tag.textContent,id);
+    reloadImages(activeFilters);
+}
+
+function reloadImages(activeFilters){
+    let filterIds = '';
+    
+    for(let i=0;i<activeFilters.children.length;i++){
+        if(filterIds === ''){
+            filterIds += activeFilters.children[i].getAttribute('tag-id');
+        }else{
+            filterIds += ',' + activeFilters.children[i].getAttribute('tag-id');
+        }
+            
+    }
+    leftPanel.innerHTML = '';
+
+    let query = '';
+
+    if(filterIds === ''){
+        query = 'SELECT * FROM images';
+    }else{
+        query = 'SELECT DISTINCT i.* FROM images i INNER JOIN tagged t ON i.id=t.imageId AND t.tagId in(' + filterIds + ')';
+    }
+    
+    connection.fetchAll(query,createDatabaseElements);
 }
 
 function updateFilter(activeFilters,tag,id){
     tag = tag.replace('#', '');
     let tagLabel = `<label tag-id="${id}" name="tag" class="tag">#${tag}</label>`;
     activeFilters.insertAdjacentHTML("beforeend", tagLabel);
+    activeFilters.querySelectorAll('label:last-child')[0].addEventListener('click',function(){
+        this.parentNode.removeChild(this);
+        reloadImages(activeFilters);
+    });
 }
