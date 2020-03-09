@@ -54,6 +54,7 @@
             const a = document.createElement('a');
             a.addEventListener('click',showItem);
             a.setAttribute('id',id);
+            a.setAttribute('name','image');
             a.className = 'left-panel-item';
 
             const imageName = document.createElement('span');
@@ -82,7 +83,6 @@
             leftPanel.innerHTML = '';
         });
 
-        //Remove item
         function removeItem(e){
             e.stopPropagation();
             const imageData = document.getElementById('imageData');
@@ -97,8 +97,17 @@
 
         function showItem(){
             let id = this.getAttribute('id');
+            setImageSelected.call(this);
             let sql = 'SELECT * FROM images WHERE id = "' + id + '";';
             connection.get(sql, showSingleElement);
+        }
+
+        function setImageSelected(){
+            var allImages = document.getElementsByName('image');
+            allImages.forEach(function(image){
+                image.classList.remove('selected')
+            });
+            this.classList.add('selected');
         }
 
         function showSingleElement(element){

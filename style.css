@@ -132,10 +132,19 @@ a.left-panel-item:not(.selected):hover{
     padding: 7px 20px;
     background-color: #67c97d;
     border-radius: 3px;
+    user-select: none;
+}
+
+.tag:hover{
+    color: white;
+    cursor: pointer;
+    background-color: #2a5834;
 }
 
 .tag-container{
     margin: 15px 20px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .input{
