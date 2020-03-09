@@ -35,132 +35,8 @@
     </div>
     <script src="./assets/js/index.js"></script>
     <script>
-        /*const electron = require('electron');
-        const {ipcRenderer, url} = electron;
-        const leftPanel = document.querySelector('#leftPanel');
-
-        const connection = require('./connect');*/
-
-        /*let sql = `SELECT id,name FROM images ORDER BY id`;
-        connection.fetchAll(sql,createDatabaseElements);*/
-
-        /*function createDatabaseElements(result){
-            result.forEach(function(item){
-                createImageRow(item.id,item);
-            });
-        }*/
-        
-        /*ipcRenderer.on('item:add',function(e,item){
-            connection.insert(item,createImageRow,item.tags);
-        });*/
-
-        /*function createImageRow(id,item){
-            const a = document.createElement('a');
-            a.addEventListener('click',showItem);
-            a.setAttribute('id',id);
-            a.setAttribute('name','image');
-            a.className = 'left-panel-item';
-
-            const imageName = document.createElement('span');
-            imageName.className = 'image-text';
-            const imageNameText = document.createTextNode(item.name);
-            imageName.appendChild(imageNameText);
-            const deleteButton = createDeleteButton();
-            a.appendChild(imageName);
-            a.appendChild(deleteButton);
-            leftPanel.appendChild(a);
-        }*/
-
-        /*function createDeleteButton(){
-            const button = document.createElement('span');
-            const buttonText = document.createTextNode('x');
-            button.appendChild(buttonText);
-            button.setAttribute('title','Eliminar');
-            button.className = 'close-small-button';
-            button.addEventListener('click', removeItem);
-
-            return button;
-        }*/
-
-        //Clear items
-        ipcRenderer.on('item:clear',function(e){
+        /*ipcRenderer.on('item:clear',function(e){
             leftPanel.innerHTML = '';
-        });
-
-        /*function removeItem(e){
-            e.stopPropagation();
-            const imageData = document.getElementById('imageData');
-            let a = e.target.closest('a');
-            let id = a.getAttribute('id');
-            connection.delete(id);
-            a.remove();
-            if(a.classList.contains('selected')){
-                imageData.classList.add('hidden');
-            }
-        }*/
-
-        /*function showItem(){
-            let id = this.getAttribute('id');
-            setImageSelected.call(this);
-            let sql = 'SELECT * FROM images WHERE id = "' + id + '";';
-            connection.get(sql, showSingleElement);
-        }
-
-        function setImageSelected(){
-            var allImages = document.getElementsByName('image');
-            allImages.forEach(function(image){
-                image.classList.remove('selected')
-            });
-            this.classList.add('selected');
-        }
-
-        function showSingleElement(element){
-            const imageFile = document.getElementById('imageFile');
-            const imageData = document.getElementById('imageData');
-            const img = document.createElement('img');
-            img.setAttribute('src',element.path + element.name + '.' + element.type);
-
-            imageFile.innerHTML = '';
-            imageFile.appendChild(img);
-
-            imageData.setAttribute('id-image',element.id);
-            imageData.classList.remove('hidden');
-
-            updateTags(element.id);
-        }
-
-        function updateTags(imageId){
-            const query = 'select t.* from tags t inner join tagged tg on t.id = tg.tagId and tg.ImageId = ' + imageId;
-            connection.fetchAll(query,addTags);
-        }
-
-        function addTags(tags){
-            const tagContainer = document.getElementById('tags');
-            tagContainer.innerHTML = '';
-            tags.forEach(function(tag){
-                let tagName = tag.name;
-                if(!!tagName){
-                    let tagLabel = `<label name="tag" class="tag">#${tagName}</label>`;
-                    tagContainer.insertAdjacentHTML("beforeend", tagLabel);
-                }
-            });
-        }*/
-
-        /*const addButton = document.getElementById('addButton');
-        addButton.addEventListener('click',function(){
-            ipcRenderer.send('addItem');
-        });
-
-        const addTagButton = document.getElementById('add_tagName');
-        addTagButton.addEventListener('click',function(){
-            const imageData = document.getElementById('imageData');
-            let imageId = imageData.getAttribute('id-image');
-            const tagContainer = document.getElementById('tags');
-            let tagName = document.getElementById('addTagInput').value;
-            
-            if(validateTag(tagName,tagContainer)){
-                connection.checkTags(imageId,[tagName],updateTags);
-            }
         });*/
 
         function validateTag(tagName,tagContainer){
@@ -177,7 +53,7 @@
             let tags = [];
             
             for(let i=0;i<tagLabels.length;i++){
-                tags.push(tagLabels[i].textContent.substring(1, tagLabels[i].textContent.length));
+                tags.push(tagLabels[i].textContent.replace('#', ''));
             }
 
             return tags;
