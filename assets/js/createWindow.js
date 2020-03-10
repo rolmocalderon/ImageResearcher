@@ -15,12 +15,13 @@ function submitForm(event){
 function getFileObject(){
     
     let file = document.getElementById('image').files[0];
+    const tagContainer = document.getElementById('tagContainer');
     return {
         name: getFileName(file.name),
         size: getFileSize(file.size),
         type: getFileExtension(file.name),
         path: getPathWithoutFileName(file.path),
-        tags: getTagsValue()
+        tags: getTagsValue(tagContainer)
     }
 }
 
