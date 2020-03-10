@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     addTagButton.addEventListener('click',function(){
         const imageData = document.getElementById('imageData');
         let imageId = imageData.getAttribute('id-image');
-        const tagContainer = document.getElementById('tags');
+        const tagContainer = document.getElementById('tagContainer');
         let tagName = document.getElementById('addTagInput').value;
         
         if(validateTag(tagName,tagContainer)){
@@ -116,7 +116,7 @@ function updateTags(imageId){
 }
 
 function addTags(tags){
-    const tagContainer = document.getElementById('tags');
+    const tagContainer = document.getElementById('tagContainer');
     tagContainer.innerHTML = '';
     tags.forEach(function(tag){
         let tagName = tag.name;

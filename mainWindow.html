@@ -24,7 +24,7 @@
                 <div id="imageFile" class="image-file"></div>
                 <div class="image-info back-white">
                     <span>Tags: </span>
-                    <div id="tags" class="tag-container"></div>
+                    <div id="tagContainer" class="tag-container"></div>
                     <div class="tag-add">
                         <input type="text" name="tag_name" id="addTagInput" class="input">
                         <button type="button" id="add_tagName">Add tag</button>
@@ -33,31 +33,12 @@
             </div>
         </div>
     </div>
+    <script src="./assets/js/common.js"></script>
     <script src="./assets/js/index.js"></script>
     <script>
         /*ipcRenderer.on('item:clear',function(e){
             leftPanel.innerHTML = '';
         });*/
-
-        function validateTag(tagName,tagContainer){
-            let tags = getTagsValue(tagContainer);
-            if(tags.length === 0){
-                return true;
-            }
-
-            return !tags.some(tag => tag === tagName);
-        }
-
-        function getTagsValue(tagContainer){
-            const tagLabels = tagContainer.querySelectorAll('label');
-            let tags = [];
-            
-            for(let i=0;i<tagLabels.length;i++){
-                tags.push(tagLabels[i].textContent.replace('#', ''));
-            }
-
-            return tags;
-        }
     </script>
 </body>
 </html>
